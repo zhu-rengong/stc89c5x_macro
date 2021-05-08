@@ -1,4 +1,4 @@
-# st89c5x_macro 介绍
+# stc89c5x_macro 介绍
 该库为STC89C5X系列单片机的开发提供了便携的宏，Keil C51 编译器在预处理环节会对宏进行展开，并在此过程中对代码进行优化，因此采用宏编程的方式可以尽可能减少面向寄存器编程的开销。
 
 # 使用方法
@@ -150,7 +150,7 @@ uartosc_setup(uart_mode, SMOD)
 /* 配置1、3模式下的串口 */
 uarttmr_setup(uart_mode, SMOD, baudrate)
 
-/* 代码示例： P0 = P1 = P2; */
+/* 代码示例 */
 uarttmr_setup(async_8b, 0, 9600);
 uarttmr_run();
 ```
