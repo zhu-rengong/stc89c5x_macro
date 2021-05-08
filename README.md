@@ -1,37 +1,156 @@
-# stc89c5x_macro
+# st89c5x_macro ½éÉÜ
+¸Ã¿âÎªSTC89C5XÏµÁĞµ¥Æ¬»úµÄ¿ª·¢Ìá¹©ÁË±ãĞ¯µÄºê£¬Keil C51 ±àÒëÆ÷ÔÚÔ¤´¦Àí»·½Ú»á¶Ôºê½øĞĞÕ¹¿ª£¬²¢ÔÚ´Ë¹ı³ÌÖĞ¶Ô´úÂë½øĞĞÓÅ»¯£¬Òò´Ë²ÉÓÃºê±à³ÌµÄ·½Ê½¿ÉÒÔ¾¡¿ÉÄÜ¼õÉÙÃæÏò¼Ä´æÆ÷±à³ÌµÄ¿ªÏú¡£
 
-#### ä»‹ç»
-è¯¥åº“ä¸ºstc89c5xç³»åˆ—å•ç‰‡æœºçš„å¼€å‘æä¾›äº†å®ç¼–ç¨‹ç‰¹æ€§ã€‚
+# Ê¹ÓÃ·½·¨
+## »·¾³ÅäÖÃ
+### stc89c5x_conf
+- ÏµÍ³Ê±ÖÓÆµÂÊÉèÖÃ
+``` C
+/**
+ * @description     : Frequency Of System Clock Type 
+ * 0.Equal to defualt fosc Specified by user
+ * 1.Equal to 11.0592Mhz
+ * 2.Equal to 12Mhz
+ */
+#define OSC_FREQ_TYPE           1U
+#define OSC_DEFUALT_FREQ_HZ     6000000UL
+```
+- ÏµÍ³»úÆ÷ÖÜÆÚÉèÖÃ
+``` C
+/**
+ * @description     : Count Rate of Timer\Counter
+ * 0.Specify as 12T, count every 12 clocks;
+ * 1.Specify as 6T, count every 6 clocks;
+ */
+#define TMR_CNT_RATE_TYPE       0U
+```
 
-#### è½¯ä»¶æ¶æ„
-è½¯ä»¶æ¶æ„è¯´æ˜
+## ÍâÉè¹¦ÄÜÏà¹Øºê
+### GPIO
+``` C
+gpio_in(idx)                // ÊäÈë¶Ë¿Ú
+gpio_out(idx,val)           // Êä³ö¶Ë¿Ú
+gpio_ref(idx)               // ÒıÓÃ¶Ë¿Ú
 
+/* ´úÂëÊ¾Àı£º P0 = P1 = P2; */
+gpio_ref(0) = gpio_out(1, gpio_in(2));
+```
 
-#### å®‰è£…æ•™ç¨‹
+### Íâ²¿ÖĞ¶Ï0ÎªÀı
+``` C
+ext0_irq_en(enable)             // ÉèÖÃÍâ²¿ÖĞ¶Ï0Ê¹ÄÜ
+ext0_irq_prio(level)            // ÉèÖÃÍâ²¿ÖĞ¶Ï0ÓÅÏÈ¼¶
+ext0_irq_trig(fall)             // ÉèÖÃÍâ²¿ÖĞ¶Ï0´¥·¢·½Ê½
+ext0_irq_trig_low()             // ÉèÖÃÍâ²¿ÖĞ¶Ï0µÍµçÆ½´¥·¢
+ext0_irq_trig_fall()            // ÉèÖÃÍâ²¿ÖĞ¶Ï0ÏÂ½µÑØ´¥·¢
+ext0_getf_irq()                 // »ñÈ¡Íâ²¿ÖĞ¶Ï0ÖĞ¶ÏÇëÇó±êÖ¾
+ext0_setf_irq()                 // ÖÃÎ»Íâ²¿ÖĞ¶Ï0ÖĞ¶ÏÇëÇó±êÖ¾
+ext0_clrf_irq()                 // Çå³ıÍâ²¿ÖĞ¶Ï0ÖĞ¶ÏÇëÇó±êÖ¾
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+/* ´úÂëÊ¾Àı */
+ext0_irq_en(1);
+ext0_irq_prio(1);
+ext0_irq_trig_fall();
+while (1)
+{
+    ext0_setf_irq();
+    while (!ext0_getf_irq())
+        ext0_clrf_irq();
+}
+```
 
-#### ä½¿ç”¨è¯´æ˜
+### ¶¨Ê±Æ÷0ÎªÀı
+``` C
+tmr0_mode_13()                  // ÉèÖÃ¶¨Ê±Æ÷0Ä£Ê½Îª13Î»
+tmr0_mode_16()                  // ÉèÖÃ¶¨Ê±Æ÷0Ä£Ê½Îª16Î»
+tmr0_mode_8()                   // ÉèÖÃ¶¨Ê±Æ÷0Ä£Ê½Îª8Î»×Ô¶¯ÖØÔØ
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+tmr0_job_coutner()              // ÉèÖÃ¶¨Ê±Æ÷0¹¤×÷·½Ê½Îª¼ÆÊıÆ÷
+tmr0_job_timer()                // ÉèÖÃ¶¨Ê±Æ÷0¹¤×÷·½Ê½Îª¶¨Ê±Æ÷
+tmr0_gate(enable)               // ÉèÖÃ¶¨Ê±Æ÷0ÃÅÄ£Ê½
+tmr0_mode_13_period_us()        // ÉèÖÃ13Î»Ä£Ê½¶¨Ê±Æ÷0µÄÖĞ¶Ï¼ä¸ô
+tmr0_mode_16_period_us()        // ÉèÖÃ16Î»Ä£Ê½¶¨Ê±Æ÷0µÄÖĞ¶Ï¼ä¸ô
+tmr0_mode_8_period_us()         // ÉèÖÃ8Î»Ä£Ê½¶¨Ê±Æ÷0µÄÖĞ¶Ï¼ä¸ô
 
-#### å‚ä¸è´¡çŒ®
+tmr0_irq_en(enable)             // ÉèÖÃ¶¨Ê±Æ÷0ÖĞ¶ÏÊ¹ÄÜ
+tmr0_irq_prio(level)            // ÉèÖÃ¶¨Ê±Æ÷0ÖĞ¶ÏÓÅÏÈ¼¶
+tmr0_getf_ovf()                 // »ñÈ¡¶¨Ê±Æ÷0ÖĞ¶ÏÒç³ö±êÖ¾
+tmr0_clrf_ovf()                 // Çå³ı¶¨Ê±Æ÷0ÖĞ¶ÏÒç³ö±êÖ¾
+tmr0_run()                      // ¿ØÖÆ¶¨Ê±Æ÷0ÔËĞĞ
+tmr0_pause()                    // ¿ØÖÆ¶¨Ê±Æ÷0Í£Ö¹
 
-1.  Fork æœ¬ä»“åº“
-2.  æ–°å»º Feat_xxx åˆ†æ”¯
-3.  æäº¤ä»£ç 
-4.  æ–°å»º Pull Request
+tmr0_mode_2x8()                 // ÉèÖÃ¶¨Ê±Æ÷0Ä£Ê½Îª2¸ö8Î»
 
+tmrtl0_job_coutner()            // ÉèÖÃ¶¨Ê±Æ÷TL0¹¤×÷·½Ê½Îª¼ÆÊıÆ÷
+tmrtl0_job_timer()              // ÉèÖÃ¶¨Ê±Æ÷TL0¹¤×÷·½Ê½Îª¶¨Ê±Æ÷
+tmrtl0_gate(enable)             // ÉèÖÃ¶¨Ê±Æ÷TL0ÃÅÄ£Ê½
 
-#### ç‰¹æŠ€
+tmrtl0_period_us(period_us)     // ÉèÖÃ2x8Ä£Ê½¶¨Ê±Æ÷TL0µÄÖĞ¶Ï¼ä¸ô
+tmrth0_period_us(period_us)     // ÉèÖÃ2x8Ä£Ê½¶¨Ê±Æ÷TH0µÄÖĞ¶Ï¼ä¸ô
 
-1.  ä½¿ç”¨ Readme\_XXX.md æ¥æ”¯æŒä¸åŒçš„è¯­è¨€ï¼Œä¾‹å¦‚ Readme\_en.md, Readme\_zh.md
-2.  Gitee å®˜æ–¹åšå®¢ [blog.gitee.com](https://blog.gitee.com)
-3.  ä½ å¯ä»¥ [https://gitee.com/explore](https://gitee.com/explore) è¿™ä¸ªåœ°å€æ¥äº†è§£ Gitee ä¸Šçš„ä¼˜ç§€å¼€æºé¡¹ç›®
-4.  [GVP](https://gitee.com/gvp) å…¨ç§°æ˜¯ Gitee æœ€æœ‰ä»·å€¼å¼€æºé¡¹ç›®ï¼Œæ˜¯ç»¼åˆè¯„å®šå‡ºçš„ä¼˜ç§€å¼€æºé¡¹ç›®
-5.  Gitee å®˜æ–¹æä¾›çš„ä½¿ç”¨æ‰‹å†Œ [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee å°é¢äººç‰©æ˜¯ä¸€æ¡£ç”¨æ¥å±•ç¤º Gitee ä¼šå‘˜é£é‡‡çš„æ ç›® [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+tmrtl0_getf_ovf()               // »ñÈ¡¶¨Ê±Æ÷TL0ÖĞ¶ÏÒç³ö±êÖ¾
+tmrtl0_clrf_ovf()               // Çå³ı¶¨Ê±Æ÷TL0ÖĞ¶ÏÒç³ö±êÖ¾
+tmrtl0_run()                    // ¿ØÖÆ¶¨Ê±Æ÷TL0ÔËĞĞ
+tmrtl0_pause()                  // ¿ØÖÆ¶¨Ê±Æ÷TL0Í£Ö¹
+tmrth0_getf_ovf()               // »ñÈ¡¶¨Ê±Æ÷TH0ÖĞ¶ÏÒç³ö±êÖ¾
+tmrth0_clrf_ovf()               // Çå³ı¶¨Ê±Æ÷TH0ÖĞ¶ÏÒç³ö±êÖ¾
+tmrth0_run()                    // ¿ØÖÆ¶¨Ê±Æ÷TH0ÔËĞĞ
+tmrth0_pause()                  // ¿ØÖÆ¶¨Ê±Æ÷TH0Í£Ö¹
+
+/* ´úÂëÊ¾Àı 1 */                   /* ´úÂëÊ¾Àı 2 */
+tmr0_mode_2x8();                   tmr0_mode_16();
+tmrtl0_job_timer();                tmr0_job_timer();
+tmrtl0_gate(0);                    tmr0_gate(0);
+tmrtl0_period_us(10);              tmr0_irq_en(1);
+tmrtl0_run();                      tmr0_irq_prio(0);
+tmrth0_period_us(20);              tmr0_mode_16_period_ms(7);
+tmrth0_run();                      tmr0_run();
+while (1)                          while (1)
+{                                  {
+    if (tmrtl0_getf_ovf()) {           if (tmr0_getf_ovf())
+        tmrtl0_clrf_ovf();             {
+    }                                      tmr0_clrf_ovf();
+    if (tmrth0_getf_ovf()) {           }
+        tmrth0_clrf_ovf();         }
+    }                               
+}
+```
+
+### ´®¿ÚUART
+``` C
+uart_mode_osc_sync_sft()            // ¹¤×÷Ä£Ê½0£ºÍ¬²½ÒÆÎ»¼Ä´æÆ÷
+uart_mode_tmr_async_8b()            // ¹¤×÷Ä£Ê½1£º8Î»£¬²¨ÌØÂÊ¿É±ä
+uart_mode_osc_async_9b()            // ¹¤×÷Ä£Ê½2£º9Î»£¬²¨ÌØÂÊ¹Ì¶¨
+uart_mode_tmr_async_9b()            // ¹¤×÷Ä£Ê½3£º9Î»£¬²¨ÌØÂÊ¿É±ä
+uart_mulcomm_en(enable)             // ÉèÖÃ¶à»úÍ¨ĞÅÄ£Ê½
+uart_rx_en(enable)                  // ÉèÖÃ´®¿Ú½ÓÊÜÊ¹ÄÜ
+uart_rx_en(enable)                  // ÉèÖÃ´®¿Ú½ÓÊÜÊ¹ÄÜ
+uart_getb_txpos9()                  // Î»9¿É×÷Ğ£ÑéÎ»¡¢µØÖ·Ö¡»òÊı¾İÖ¡
+uart_getb_rxpos9()                  // Î»9¿É×÷Ğ£ÑéÎ»¡¢µØÖ·Ö¡»òÊı¾İÖ¡
+uart_irq_en(enable)                 // ÉèÖÃ´®¿ÚÖĞ¶ÏÊ¹ÄÜ
+uart_irq_prio(level)                // ÉèÖÃ´®¿ÚÖĞ¶ÏÓÅÏÈ¼¶
+uart_getf_txirq()                   // »ñÈ¡TxÖĞ¶ÏÇëÇó±êÖ¾Î»
+uart_setf_txirq()                   // ÉèÖÃTxÖĞ¶ÏÇëÇó±êÖ¾Î»
+uart_clrf_txirq()                   // Çå³ıTxÖĞ¶ÏÇëÇó±êÖ¾Î»
+uart_getf_rxirq()                   // »ñÈ¡RxÖĞ¶ÏÇëÇó±êÖ¾Î»
+uart_setf_rxirq()                   // ÉèÖÃRxÖĞ¶ÏÇëÇó±êÖ¾Î»
+uart_clrf_rxirq()                   // Çå³ıRxÖĞ¶ÏÇëÇó±êÖ¾Î»
+uart_read()                         // ¶ÁÈ¡´®¿ÚÊı¾İ
+uart_write(data)                    // Ğ´Èë´®¿ÚÊı¾İ
+uart_baud_x2(SMOD)                  // ÉèÖÃ´®¿Ú²¨ÌØÂÊ¼Ó±¶
+
+/* Ä£Ê½1\3ÏÂ£¬²¨ÌØÂÊÉú³ÉÆ÷²ÉÓÃTimer1£¨Ä£Ê½2£©*/
+uarttmr_ret_relval(SMOD, baudrate)  // ¼ÆËã²¢·µ»ØTimer1µÄÖØÔØÖµ
+uarttmr_baud_conf(SMOD, baudrate)   // ÉèÖÃ´®¿ÚµÄ²¨ÌØÂÊ
+uarttmr_run()                       // ¿ØÖÆ²¨ÌØÂÊÉú³ÉÆ÷ÔËĞĞ
+uarttmr_pause()                     // ¿ØÖÆ²¨ÌØÂÊÉú³ÉÆ÷Í£Ö¹
+
+/* ÅäÖÃ0¡¢2Ä£Ê½ÏÂµÄ´®¿Ú */
+uartosc_setup(uart_mode, SMOD)
+/* ÅäÖÃ1¡¢3Ä£Ê½ÏÂµÄ´®¿Ú */
+uarttmr_setup(uart_mode, SMOD, baudrate)
+
+/* ´úÂëÊ¾Àı£º P0 = P1 = P2; */
+uarttmr_setup(async_8b, 0, 9600);
+uarttmr_run();
+```
